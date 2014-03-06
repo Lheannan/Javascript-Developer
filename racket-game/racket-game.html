@@ -1,108 +1,227 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset='utf-8'>
-		<meta http-equiv="X-UA-Compatible" content="chrome=1">
-		<meta name="viewport" content="width=640" />
+		<title>Racket Game</title>
+		<meta charset="utf-8">
+		<style>
+		#box {
+			position: relative;
+			background-color: #999;
+			width: 900px;
+			height: 600px;
+			margin: 0 auto;
+			overflow: hidden;
+		}
 
-		<link rel="stylesheet" href="stylesheets/core.css" media="screen"/>
-		<link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)"/>
-		<link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+		#bar1, #bar2 {
+			width: 40px;
+			height: 100px;
+			position: absolute;
+			padding: 0;
+			text-align: center;
+			font-weight: bold;
+			line-height: 100px;
+		}
 
-		<script type="text/javascript" src="javascripts/modernizr.js"></script>
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-		<script type="text/javascript" src="javascripts/headsmart.min.js"></script>
-		<script type="text/javascript">
-			$(document).ready(function () {
-				$('#main_content').headsmart()
-			})
-		</script>
-		<title>Javascript-developer</title>
+		#bar1 {
+			left: 5px;
+			background-color: #2497EB;
+		}
+
+		#bar2 {
+			right: 5px;
+			background-color: #EB24C6;
+		}
+		#ball {
+			width: 40px;
+			height: 40px;
+			background-color: purple;
+			position: absolute;
+			padding: 0;
+			border-radius: 50%;
+			border: 5px solid #000;
+			top:275px;
+			left: 425px;
+		}
+
+		</style>		
 	</head>
-
 	<body>
-    <a id="forkme_banner" href="https://github.com/Lheannan/Javascript-Developer">View on GitHub</a>
-    <div class="shell">
+		<div id="box">
+		<div id="ball"></div>
+		<div id="bar1">0</div>
+		<div id="bar2">0</div>
+	</div>
 
-		<header>
-			<span class="ribbon-outer">
-				<span class="ribbon-inner">
-					<h1>Javascript-developer</h1>
-					<h2>My apps and exercises from Javascript Developer course</h2>
-				</span>
-			  	<span class="left-tail"></span>
-			  	<span class="right-tail"></span>
-			</span>
-		</header>
+		<script type="text/javascript">
+		alert('Racket Game ***Player 1*** up:W down:Z || ***Player 2*** up:I down:M');
+		
+		var alto1 = 0;
+		var alto2 = 0;
 
-		<section id="downloads">
-			<span class="inner">
-				<a href="https://github.com/Lheannan/Javascript-Developer/zipball/gh-pages" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/Lheannan/Javascript-Developer/tarball/gh-pages" class="tgz"><em>download</em> .TGZ</a>
-			</span>
-		</section>
+		var punti1 = 0;
+		var punti2 = 0;
 
-		<span class="banner-fix"></span>
+		var v1 = 0;
+		var v2 = 0;
 
-		<section id="main_content">
-			<h3><a name="about-me" class="anchor" href="#about-me"><span class="octicon octicon-link"></span></a>Qualcosa su di me...</h3>
-			<p>Sono Lucia, graphic designer e web developer.</p>
-			<p>Fin da piccola ho dimostrato interesse all'utilizzo di supporti informatici, 
-			passione che si &egrave; poi evoluta in campo grafico nel 2003, unendosi alla mia necessit&agrave; di esprimermi in ambito creativo.</p>
-			<p>Ho lavorato parecchi anni in una piccola ma dinamica realt&agrave; locale, realizzando prodotti soprattutto cartacei e pubblicitari, 
-			per piccole e medie aziende del vicentino, nonch&eacute; per enti pubblici.</p>
-			<p>In risposta all'evolversi delle tecnologie, ho in seguito iniziato ad approfondire l'ambito web. 
-			Nel 2011 inizio a progettare la nascita di una nuova attivit&agrave;, in collaborazione con le persone che nel 2012 
-			sarebbero poi diventate miei soci. Ci siamo occupati di gestionali web based e di creazione di siti web. 
-			In particolare le nostre tecnologie si sono basate sulla piattaforma open source Wordpress. 
-			Il ruolo che mi competeva riguardava la grafica e lo studio dell'user interface, oltre che la cura del rapporto con i clienti.</p>
-			<p>Nel 2013 decido di affinare la mia conoscenza in ambito web e di andare oltre alla presentazione, 
-			studiandone la struttura e i meccanismi. Inizio quindi un corso da sviluppatore, che sto attualmente frequentando.</p>
+		var px = 100;
+		var py = 100;
+		var vx = 0.7;
+		var vy = 0.7;
 
-			<h3><a name="corso-javascript" class="anchor" href="#corso-javascript"><span class="octicon octicon-link"></span></a>Il corso Javascript Developer</h3>
-			<p>Durata del corso: 1.312 ore, di cui 832 di formazione in aula e 480 di stage.
-			Inizio al 30 settembre 2013 e termine al 13 giugno 2014</p>
-			<p>Dove si tengono le lezioni: TIS innovation park in via Siemens 19, a Bolzano.</p>	
-			<p>Frequenza: obbligatoria, con impegno settimanale di 40 ore.</p>
+		t = setInterval( function() {
 
-			<p> Linguaggi e framework analizzati durante il corso:
-				<ul>
-					<li>HTML5</li>
-					<li>CSS3</li>
-					<li>JavaScript</li>
-					<li>jQuery</li>
-					<li>Node.js</li>
-					<li>MongoDB</li>
-					<li>PHP5</li>
-					<li>MySql</li>
-					<li>Ajax</li>
-					<li>XML</li>
-					<li>jQuery Mobile</li>
-					<li>PhoneGap</li>		
-				</ul>
-			</p>
+			alto1 += v1 * 5;
+			if (alto1 <= 0) {
+				alto1 = 0;
+			}
+			if (alto1 >= 500 ) {
+				alto1 = 500;
+			}
+			document.getElementById('bar1').style.top = alto1 + "px";	
+				
 
-			<h3><a name="esercitazioni" class="anchor" href="#esercitazioni"><span class="octicon octicon-link"></span></a>Alcuni esempi di esercitazioni</h3>
-			<p>
-				<ol>
-					<li><a name="javascript-gallery" href="http://lheannan.github.io/Javascript-Developer/little-Javascript-gallery/gallery.html"><span class="octicon octicon-link">Little Javascript Gallery</span></a></li>
-					<li><a name="javascript-gallery" href="http://lheannan.github.io/Javascript-Developer/little-jQuery-Gallery/gallery.html"><span class="octicon octicon-link">Little jQuery Gallery</span></a></li>
-					<li><a name="Racket Game" href="http://lheannan.github.io/Javascript-Developer/racket-game/racket-game.html"><span class="octicon octicon-link">Racket Game</span></a></li>
-					<li></li>
-				</ol>
-			</p>
-		</section>
+			alto2 += v2 * 5;
+			if (alto2 <= 0) {
+				alto2 = 0;
+			}
+			if (alto2 >= 500 ) {
+				alto2 = 500;
+			}
+			document.getElementById('bar2').style.top = alto2 + "px";
 
-		<footer>
-			<span class="ribbon-outer">
-				<span class="ribbon-inner">
-					<p>this project by <a href="https://github.com/Lheannan">Lheannan</a> can be found on <a href="https://github.com/Lheannan/Javascript-Developer">GitHub</a></p>
-				</span>
-				<span class="left-tail"></span>
-				<span class="right-tail"></span>
-			</span>
-			<p>Generated with <a href="http://pages.github.com">GitHub Pages</a> using Merlot</p>
-			<span class="octocat"></span>
-		</footer>
-    </div>    
-  </body>
+			px = px + vx * 5;
+			py = py + vy * 5;
+
+			if (px > 850) {
+				vx = - vx;
+				   punti1 ++;
+				   document.getElementById('bar1').textContent = punti1;
+
+				if(punti1 == 10){
+					alert("Player1 ha vinto!")
+					clearInterval(t);
+				}
+				
+			}
+
+			if (px > 810 && !(alto2 - py > 50 || py > alto2+100)) {
+					delta = (alto2 + 50) - (py+25);
+					if (delta > -25 && delta < 25) {
+						vy = 0;
+						vx = -1;
+					}
+					if (delta <= -25) {
+						vx = -0.7
+						vy = 0.7
+					}
+					if (delta >= 25) {
+						vx = -0.7
+						vy = -0.7
+					}
+					
+			}
+
+
+
+			if (px < 0) {
+
+				vx = Math.abs(vx);
+				punti2 ++;
+				document.getElementById('bar2').textContent = punti2;
+
+				if(punti2 == 10){
+					alert("Player2 ha vinto!")
+					clearInterval(t);
+				}
+				
+			}
+
+			if (px < 50 && !(alto1 - py > 50 || py > alto1+100)) {
+					delta = (alto1 + 50) - (py+25);
+					if (delta > -25 && delta < 25) {
+						vy = 0;
+						vx = 1;
+					}
+					if (delta <= -25) {
+						vx = 0.7
+						vy = 0.7
+					}
+					if (delta >= 25) {
+						vx = 0.7
+						vy = -0.7
+					}
+					
+			}
+
+			if (py > 550 || py < 0) {
+				vy = - vy;
+			}
+
+			document.getElementById('ball').style.top = py + "px";
+			document.getElementById('ball').style.left = px + "px";			
+
+		}, 10);
+
+		document.onkeyup = function(e) {
+
+
+			switch(e.keyCode) {
+
+				// PLAYER 1 ***********************************************
+				case(90): //giu
+					if (v1 == 1) { 
+						v1 = 0;
+					}
+					break;
+				case(87): //su
+					if (v1 == -1) { 
+						v1 = 0;
+					}
+					break;
+					
+				// PLAYER 2 ***********************************************
+				case(77): //giu
+					if (v2 == 1) {
+						v2 = 0;
+					}
+					break;
+				case(73): //su
+					if (v2 == -1) {
+						v2 = 0;
+					}
+					break;
+			}
+
+		}
+
+		document.onkeydown = function(e) {
+			//alert(e.keyCode); //per sapere il codice relativo al tasto premuto
+			switch(e.keyCode) {
+
+				// PLAYER 1 ***********************************************
+				case(90): //giu
+					v1 = 1;
+				break;
+
+				case(87): //su
+					v1 = -1;
+				break;
+
+				// PLAYER 2 ***********************************************
+				case(77): //giu
+					v2 = 1;
+				break;
+
+				case(73): //su
+					v2 = -1;
+				break;
+
+			}		
+
+		}
+		</script>
+
+	</body>
 </html>
